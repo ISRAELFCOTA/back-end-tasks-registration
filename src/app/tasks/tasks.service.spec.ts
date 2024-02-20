@@ -1,18 +1,26 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { TasksService } from './tasks.service';
+import { Test, TestingModule } from "@nestjs/testing";
+import { TasksService } from "./tasks.service";
+import { getRepositoryToken } from "@nestjs/typeorm";
+import { TasksEntity } from "./mail.entity";
 
-describe('TasksService', () => {
-  let service: TasksService;
+describe("TasksService", () => {
+  let taskService: TasksService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [TasksService],
+      providers: [
+        TasksService,
+        {
+          provide: getRepositoryToken(TasksEntity), // mock de metodos para testar cenarios da aplicação
+          useValue: {},
+        },
+      ],
     }).compile();
 
-    service = module.get<TasksService>(TasksService);
+    taskService = module.get<TasksService>(TasksService);
   });
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
+  it("should be defined", () => {
+    expect(taskService).toBeDefined();
   });
 });
