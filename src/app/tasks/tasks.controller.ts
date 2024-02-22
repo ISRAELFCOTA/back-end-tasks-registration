@@ -1,7 +1,7 @@
-import { Body, Controller, Post, Get } from "@nestjs/common";
+import { Body, Controller, Post, Get, Param } from "@nestjs/common";
 import { TasksService } from "./tasks.service";
 import { SaveTaskDto } from "./dto/save-task.dto";
-import { ReadAllTaskDto } from "./dto/read-all-task.dto";
+import { ReadTaskDto } from "./dto/read-task.dto";
 
 @Controller("tasks")
 export class TasksController {
@@ -11,7 +11,12 @@ export class TasksController {
     return this.taskService.save(body);
   }
   @Get()
-  async readAllTasks(@Body() body: ReadAllTaskDto) {
+  async readAllTasks() {
     return this.taskService.readAll();
+  }
+
+  @Get("/id")
+  async readTask(@Param("id") id: ReadTaskDto) {
+    return this.taskService.readTask({ taskId: id.taskId });
   }
 }
