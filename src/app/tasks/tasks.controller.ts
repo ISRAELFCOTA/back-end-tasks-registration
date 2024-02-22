@@ -1,7 +1,8 @@
-import { Body, Controller, Post, Get, Param } from "@nestjs/common";
+import { Body, Controller, Post, Get, Param, Delete, Patch } from "@nestjs/common";
 import { TasksService } from "./tasks.service";
 import { SaveTaskDto } from "./dto/save-task.dto";
-import { ReadTaskDto } from "./dto/read-task.dto";
+import { UpdateTaskDto } from "./dto/update-task.dto";
+import { TasksEntity } from "./tasks.entity";
 
 @Controller("tasks")
 export class TasksController {
@@ -14,9 +15,18 @@ export class TasksController {
   async readAllTasks() {
     return this.taskService.readAll();
   }
+  @Get(":id")
+  async readTask(@Param("id") id: string) {
+    return this.taskService.readTask({ taskId: id });
+  }
+  @Delete(":id")
+  deleteTask(@Param("id") id: string): Promise<void> {
+    return this.taskService.deleteTask({ taskId: id });
+  }
 
-  @Get("/id")
-  async readTask(@Param("id") id: ReadTaskDto) {
-    return this.taskService.readTask({ taskId: id.taskId });
+  @Patch(":id")
+  async updateTask(@Param("id") id: string, @Body() updateTaskDto: UpdateTaskDto): Promise<TasksEntity> {
+    updateTaskDto.taskId = id;
+    return await this.taskService.updateTask(updateTaskDto);
   }
 }
