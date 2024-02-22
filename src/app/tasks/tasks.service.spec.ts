@@ -18,6 +18,7 @@ describe("TasksService", () => {
           useValue: {
             create: jest.fn().mockReturnValue({}),
             save: jest.fn().mockResolvedValue({}),
+            find: jest.fn().mockResolvedValue({}),
           },
         },
       ],
@@ -32,6 +33,15 @@ describe("TasksService", () => {
     expect(taskRepository).toBeDefined();
   });
 
+  describe("readAllTasks", () => {
+    it("should return all tasks", async () => {
+      // Act
+      const result = await taskService.readAll();
+      // Assert
+      expect(result).toBeDefined();
+    });
+  });
+
   describe("save", () => {
     it("should save a new task with success", async () => {
       // Arrange
@@ -40,8 +50,7 @@ describe("TasksService", () => {
         taskStatus: "rodando",
       };
       const tasksEntityMock = {
-        taskName: "programar",
-        taskStatus: "rodando",
+        ...data,
       } as TasksEntity;
       jest.spyOn(taskRepository, "create").mockReturnValueOnce(tasksEntityMock);
       jest.spyOn(taskRepository, "save").mockResolvedValueOnce(tasksEntityMock);
@@ -49,8 +58,8 @@ describe("TasksService", () => {
       const result = await taskService.save(data);
       // Assert
       expect(result).toBeDefined();
-      expect(taskRepository.create).toBeCalledTimes(1);
-      expect(taskRepository.save).toBeCalledTimes(1);
+      expect(taskRepository.create).toHaveBeenCalledTimes(1);
+      expect(taskRepository.save).toHaveBeenCalledTimes(1);
     });
   });
 });

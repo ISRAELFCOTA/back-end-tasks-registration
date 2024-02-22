@@ -3,6 +3,7 @@ import { Repository } from "typeorm";
 import { TasksEntity } from "./tasks.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { SaveTaskDto } from "./dto/save-task.dto";
+import { ReadAllTaskDto } from "./dto/read-all-task.dto";
 
 @Injectable()
 export class TasksService {
@@ -13,5 +14,9 @@ export class TasksService {
 
   async save(data: SaveTaskDto): Promise<TasksEntity> {
     return this.taskRepository.save(this.taskRepository.create(data));
+  }
+
+  async readAll(): Promise<TasksEntity[]> {
+    return this.taskRepository.find();
   }
 }
