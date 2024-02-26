@@ -8,7 +8,7 @@ export class TasksEntity {
   @Column({ name: "task_name", nullable: false })
   taskName: string;
 
-  @Column({ name: "task_status", type: "int", nullable: false })
+  @Column({ name: "task_status", nullable: false })
   taskStatus: string;
 
   @CreateDateColumn({ name: "create_date_task" }) //cria datetime para controle de criação das tarefas
