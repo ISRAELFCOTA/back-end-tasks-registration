@@ -9,8 +9,8 @@ import { TasksModule } from "./app/tasks/tasks.module";
     TypeOrmModule.forRoot({
       type: "postgres",
       host: "localhost",
-      port: 5432,
-      database: "registered-tasks",
+      port: 5441,
+      database: "postgres",
       username: "postgres",
       password: "admin421",
       synchronize: true,
