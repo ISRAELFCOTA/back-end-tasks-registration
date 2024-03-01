@@ -3,7 +3,6 @@ import { TasksService } from "./tasks.service";
 import { getRepositoryToken } from "@nestjs/typeorm";
 import { TasksEntity } from "./tasks.entity";
 import { Repository } from "typeorm";
-import { SaveTaskDto } from "./dto/save-task.dto";
 
 describe("TasksService", () => {
   let taskService: TasksService;
@@ -57,6 +56,22 @@ describe("TasksService", () => {
       // Act & Assert
       await expect(taskService.deleteTask(deleteTaskDto)).resolves.not.toThrow();
       expect(taskRepository.delete).toHaveBeenCalledWith(taskId);
+    });
+  });
+
+  describe("findItemsByStatus", () => {
+    it("should return tasks with the specified status", async () => {
+      // Arrange
+      const status = "1";
+      const mockTasks = [
+        { id: 1, name: "Task 1", status: "1" },
+        { id: 2, name: "Task 2", status: "1" },
+      ];
+      // Act
+      const result = await taskService.findItemsByStatus(status);
+      // Assert
+      expect(result).toEqual(mockTasks);
+      expect(taskRepository.find).toHaveBeenCalledWith({ task_status: status });
     });
   });
 });

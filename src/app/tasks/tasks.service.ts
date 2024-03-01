@@ -55,4 +55,9 @@ export class TasksService {
 
     return updatedTask;
   }
+
+  async findItemsByStatus(status: string): Promise<TasksEntity[]> {
+    const items = await this.taskRepository.createQueryBuilder("task").where("task.task_status = :status", { status }).getMany();
+    return items;
+  }
 }

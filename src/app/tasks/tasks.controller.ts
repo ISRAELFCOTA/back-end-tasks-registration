@@ -29,4 +29,9 @@ export class TasksController {
     updateTaskDto.taskId = id;
     return await this.taskService.updateTask(updateTaskDto);
   }
+
+  @Get("/status/:status")
+  async findItemsByStatus(@Param("status") status: string): Promise<TasksEntity[]> {
+    return this.taskService.findItemsByStatus(status);
+  }
 }
