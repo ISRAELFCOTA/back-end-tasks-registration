@@ -19,6 +19,9 @@ describe("TasksService", () => {
             create: jest.fn().mockReturnValue({}),
             save: jest.fn().mockResolvedValue({}),
             find: jest.fn().mockResolvedValue({}),
+            findOne: jest.fn().mockResolvedValue(undefined), // Mocking findOne to return undefined
+            delete: jest.fn().mockResolvedValue({}),
+            update: jest.fn().mockResolvedValue({}),
           },
         },
       ],
@@ -33,33 +36,27 @@ describe("TasksService", () => {
     expect(taskRepository).toBeDefined();
   });
 
-  describe("readAllTasks", () => {
-    it("should return all tasks", async () => {
+  describe("readTask", () => {
+    it("should return undefined if task is not found", async () => {
+      // Arrange
+      const taskId = "6352e554-9adc-4741-8015-7374654b8428";
+      const readTaskDto = { taskId };
       // Act
-      const result = await taskService.readAll();
+      const result = await taskService.readTask(readTaskDto);
       // Assert
-      expect(result).toBeDefined();
+      expect(result).toBeUndefined();
+      expect(taskRepository.findOne).toHaveBeenCalledWith({ where: { task_id: taskId } });
     });
   });
 
-  describe("save", () => {
-    it("should save a new task with success", async () => {
+  describe("deleteTask", () => {
+    it("should not throw error if task is not found", async () => {
       // Arrange
-      const data: SaveTaskDto = {
-        taskName: "programar",
-        taskStatus: "rodando",
-      };
-      const tasksEntityMock = {
-        ...data,
-      } as TasksEntity;
-      jest.spyOn(taskRepository, "create").mockReturnValueOnce(tasksEntityMock);
-      jest.spyOn(taskRepository, "save").mockResolvedValueOnce(tasksEntityMock);
-      // Act
-      const result = await taskService.save(data);
-      // Assert
-      expect(result).toBeDefined();
-      expect(taskRepository.create).toHaveBeenCalledTimes(1);
-      expect(taskRepository.save).toHaveBeenCalledTimes(1);
+      const taskId = "6352e554-9adc-4741-8015-7374654b8428";
+      const deleteTaskDto = { taskId };
+      // Act & Assert
+      await expect(taskService.deleteTask(deleteTaskDto)).resolves.not.toThrow();
+      expect(taskRepository.delete).toHaveBeenCalledWith(taskId);
     });
   });
 });
